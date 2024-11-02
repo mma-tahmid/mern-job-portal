@@ -1,6 +1,0 @@
-
-PORT = 6000
-DATABASE_URI= mongodb+srv://tahmid-lms:<password>@cluster4.7hn77xy.mongodb.net/mern-project-structure?retryWrites=true&w=majority
-BASE_URL= /api/v3
-JWT_SECRET_KEY = KLJHDHDUDDDVG 
-
