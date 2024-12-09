@@ -4,7 +4,7 @@ require("dotenv").config();
 // 1. Basic LIB import
 //const router = require("./src/routes/api");
 const userApi = require("./src/routes/usersApi")
-//const categorysApi = require("./src/routes/categoryApi")
+const companysApi = require("./src/routes/companyApi")
 const productssApi = require("./src/routes/productApi")
 
 const express = require("express");
@@ -86,8 +86,8 @@ mongoose.connect(process.env.DATABASE_URI, OPTION)
 const baseUrl = process.env.BASE_URL
 
 app.use(`${baseUrl}/user-auth`, userApi); // .env ar kono kiso path ar modddhe set korte hore aivabe set korte hobe
-// app.use(`${baseUrl}/category`, categorysApi);
-app.use(`${baseUrl}/products`, productssApi);
+app.use(`${baseUrl}/company`, companysApi);
+//app.use(`${baseUrl}/products`, productssApi);
 
 
 
