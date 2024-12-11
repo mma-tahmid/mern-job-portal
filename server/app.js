@@ -5,7 +5,8 @@ require("dotenv").config();
 //const router = require("./src/routes/api");
 const userApi = require("./src/routes/usersApi")
 const companysApi = require("./src/routes/companyApi")
-const productssApi = require("./src/routes/productApi")
+const jobsApi = require("./src/routes/jobApi")
+
 
 const express = require("express");
 
@@ -87,6 +88,7 @@ const baseUrl = process.env.BASE_URL
 
 app.use(`${baseUrl}/user-auth`, userApi); // .env ar kono kiso path ar modddhe set korte hore aivabe set korte hobe
 app.use(`${baseUrl}/company`, companysApi);
+app.use(`${baseUrl}/job`, jobsApi);
 //app.use(`${baseUrl}/products`, productssApi);
 
 
