@@ -10,7 +10,8 @@ const router = express.Router();
 
 router.post("/create-job", VerifyToken, jobsController.CreateJob);
 router.get("/all-jobs", VerifyToken, jobsController.GetAllJobs);
-router.get("/single-job/:pid", VerifyToken, jobsController.GetJobById);
+router.get("/student-job/:pid", VerifyToken, jobsController.GetJobById);
+router.get("/get-admin-jobs", VerifyToken, jobsController.getAdminJobs);
 
 
 

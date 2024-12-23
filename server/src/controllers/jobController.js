@@ -75,7 +75,9 @@ exports.GetAllJobs = async (req, res) => {
         //     $regex: A MongoDB operator to match strings using regular expressions.
         //     $options: "i": Case-insensitive matching.
 
-        const alljobs = await jobmodel.find(query)
+        const alljobs = await jobmodel.find(query).populate({
+            path: "companys" // this companys comes from jobModel
+        }).sort({ createdAt: -1 })
 
         if (!alljobs) {
             return res.status(404).send({
@@ -115,7 +117,7 @@ exports.GetJobById = async (req, res) => {
 
     try {
 
-        const job = await jobmodel.findById(req.params.pid)
+        const job = await jobmodel.findById(req.params.pid);
 
         if (!job) {
             return res.status(404).send({
@@ -133,14 +135,51 @@ exports.GetJobById = async (req, res) => {
     }
 
     catch (error) {
+
         res.status(500).send({
             success: false,
             error,
             message: "Error in Getting Single Jobs",
             error: error.message
         })
+
+    }
+}
+
+
+// ADMIN, How much job create 
+
+exports.getAdminJobs = async (req, res) => {
+
+    try {
+
+        const adminUserId = req.userInformation.individualUserTokenId;
+
+        const jobs = await jobmodel.find({ createdBy: adminUserId })
+
+        if (!jobs) {
+            return res.status(404).send({
+                success: false,
+                message: "Job not found",
+            })
+        }
+
+        res.status(200).send({
+            success: true,
+            output: jobs,
+        })
+
     }
 
+    catch (error) {
+
+        res.status(500).send({
+            success: false,
+            error,
+            message: "Error in Getting admin Jobs",
+            error: error.message
+        })
+    }
 }
 
 
