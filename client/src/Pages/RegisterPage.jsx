@@ -26,7 +26,7 @@ const RegisterPage = () => {
     const changeFileHandler = (e) => {
         setInput({ ...input, file: e.target.files?.[0] })
     }
-    //
+    // no comment add
     const submitHandler = async (event) => {
         event.preventDefault()
         // console.log(input)
