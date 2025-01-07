@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '@/components/shared/Navbar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,6 +7,23 @@ import { RadioGroup } from '@/components/ui/radio-group';
 import { Link } from 'react-router-dom';
 const LoginPage = () => {
 
+    const [input, setInput] = useState({
+        email: "",
+        password: "",
+        role: "",
+    })
+
+    const changeEventHandler = (e) => {
+        setInput({ ...input, [e.target.name]: e.target.value })
+    }
+
+
+    const submitHandler = async (event) => {
+        event.preventDefault()
+        console.log(input)
+
+    }
+
     return (
 
         <>
@@ -14,7 +31,7 @@ const LoginPage = () => {
 
             <div className='main-container flex items-center justify-center'>
 
-                <form action="" className='w-1/2 border border-gray-200 rounded-sm p-4 my-4'>
+                <form onSubmit={submitHandler} className='w-1/2 border border-gray-200 rounded-sm p-4 my-4'>
 
                     <h1 className='font-bold text-xl mb-5'>Login</h1>
 
@@ -22,6 +39,9 @@ const LoginPage = () => {
                         <Label>Email</Label>
                         <Input
                             type="email"
+                            name="email"
+                            onChange={changeEventHandler}
+                            value={input.email}
                             placeholder="alex@gmail.com"
                         />
                     </div>
@@ -30,6 +50,9 @@ const LoginPage = () => {
                         <Label>Password</Label>
                         <Input
                             type="password"
+                            name="password"
+                            onChange={changeEventHandler}
+                            value={input.password}
                             placeholder="axf134"
                         />
                     </div>
@@ -42,6 +65,8 @@ const LoginPage = () => {
                                     type="radio"
                                     name="role"
                                     value="student"
+                                    checked={input.role === "student"}
+                                    onChange={changeEventHandler}
                                     className="cursor-pointer"
                                 />
                                 <Label htmlFor="r1">Student</Label>
@@ -54,6 +79,8 @@ const LoginPage = () => {
                                     type="radio"
                                     name="role"
                                     value="recruiter"
+                                    checked={input.role === "recruiter"}
+                                    onChange={changeEventHandler}
                                     className="cursor-pointer"
                                 />
                                 <Label htmlFor="r1">Recruiter</Label>
@@ -64,7 +91,7 @@ const LoginPage = () => {
                         </RadioGroup>
                     </div>
 
-                    
+
 
                     <Button type="submit" className="w-full my-4 uppercase"> Login </Button>
                     <span className='text-sm'>Do not have an account? <Link className='text-blue-900' to="/signup"> Sign-up </Link></span>

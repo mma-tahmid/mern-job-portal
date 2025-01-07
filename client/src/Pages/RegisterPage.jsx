@@ -3,10 +3,60 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import React from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const RegisterPage = () => {
+
+
+    const [input, setInput] = useState({
+        fullName: "",
+        email: "",
+        password: "",
+        phone: "",
+        role: "",
+        file: ""
+    })
+
+    const changeEventHandler = (e) => {
+        setInput({ ...input, [e.target.name]: e.target.value })
+    }
+
+    const changeFileHandler = (e) => {
+        setInput({ ...input, file: e.target.files?.[0] })
+    }
+    //
+    const submitHandler = async (event) => {
+        event.preventDefault()
+        // console.log(input)
+        const formData = new FormData(); // use FormData() for image
+
+        formData.append("fullName", input.fullName)
+        formData.append("email", input.email)
+        formData.append("password", input.password)
+        formData.append("phone", input.phone)
+        formData.append("role", input.role)
+        if (input.file) {
+            formData.append("file", input.file)
+        }
+
+        try {
+
+            const response = await axios.post("/api/v8/user-auth/registration", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+                withCredentials: true
+
+            })
+
+        }
+        catch (error) {
+
+        }
+
+    }
 
     return (
 
@@ -15,7 +65,7 @@ const RegisterPage = () => {
 
             <div className='main-container flex items-center justify-center'>
 
-                <form action="" className='w-1/2 border border-gray-200 rounded-sm p-4 my-4'>
+                <form onSubmit={submitHandler} className='w-1/2 border border-gray-200 rounded-sm p-4 my-4'>
 
                     <h1 className='font-bold text-xl mb-5'>Sign Up</h1>
 
@@ -23,6 +73,9 @@ const RegisterPage = () => {
                         <Label>Full Name</Label>
                         <Input
                             type="text"
+                            name="fullName"
+                            onChange={changeEventHandler}
+                            value={input.fullName}
                             placeholder="Alex hales"
                         />
                     </div>
@@ -31,6 +84,9 @@ const RegisterPage = () => {
                         <Label>Email</Label>
                         <Input
                             type="email"
+                            name="email"
+                            onChange={changeEventHandler}
+                            value={input.email}
                             placeholder="alex@gmail.com"
                         />
                     </div>
@@ -39,6 +95,9 @@ const RegisterPage = () => {
                         <Label>Password</Label>
                         <Input
                             type="password"
+                            name="password"
+                            onChange={changeEventHandler}
+                            value={input.password}
                             placeholder="axf134"
                         />
                     </div>
@@ -47,6 +106,9 @@ const RegisterPage = () => {
                         <Label>Phone Number</Label>
                         <Input
                             type="text"
+                            name="phone"
+                            onChange={changeEventHandler}
+                            value={input.phone}
                             placeholder="01728345789"
                         />
                     </div>
@@ -60,6 +122,8 @@ const RegisterPage = () => {
                                     type="radio"
                                     name="role"
                                     value="student"
+                                    checked={input.role === "student"}
+                                    onChange={changeEventHandler}
                                     className="cursor-pointer"
                                 />
                                 <Label htmlFor="r1">Student</Label>
@@ -71,6 +135,8 @@ const RegisterPage = () => {
                                     type="radio"
                                     name="role"
                                     value="recruiter"
+                                    checked={input.role === "recruiter"}
+                                    onChange={changeEventHandler}
                                     className="cursor-pointer"
                                 />
                                 <Label htmlFor="r1">Recruiter</Label>
@@ -86,7 +152,7 @@ const RegisterPage = () => {
                         <Input
                             accept="image/*"
                             type="file"
-
+                            onChange={changeFileHandler}
                             className="cursor-pointer"
                         />
                     </div>

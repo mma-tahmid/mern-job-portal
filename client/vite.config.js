@@ -6,6 +6,18 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
 
+  server: {
+    proxy: {
+      // je api endpoint dia start hobe seta bujia diar jonno
+      '/api/': {
+        target: 'http://localhost:8000',
+        //target: 'https://full-stack-eeshop-mart-e-commerce-app.onrender.com',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  },
+
   //SETUP ShadCN UI
   resolve: {
     alias: {
