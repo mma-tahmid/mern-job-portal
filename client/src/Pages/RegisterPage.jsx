@@ -2,10 +2,13 @@ import Navbar from '@/components/shared/Navbar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { RadioGroup } from '@/components/ui/radio-group';
+import { EndLoading, StartLoading } from '@/react-redux/slice/userSlice';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const RegisterPage = () => {
 
@@ -19,6 +22,8 @@ const RegisterPage = () => {
         file: ""
     })
 
+    const navigate = useNavigate();
+
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value })
     }
@@ -27,6 +32,12 @@ const RegisterPage = () => {
         setInput({ ...input, file: e.target.files?.[0] })
     }
     // no comment add
+
+    // Redux
+    const dispatch = useDispatch()
+
+    const { loading } = useSelector((state) => state.userAuth)
+
     const submitHandler = async (event) => {
         event.preventDefault()
         // console.log(input)
@@ -42,18 +53,32 @@ const RegisterPage = () => {
         }
 
         try {
+            dispatch(StartLoading())
 
             const response = await axios.post("/api/v8/user-auth/registration", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 },
                 withCredentials: true
-
             })
+
+            if (response.data.success) {
+
+                navigate("/login")
+                toast.success(response.data.message, { position: "bottom-left" }) // toast use for notifications 
+            }
+            else {
+                toast.error(response.data.message, { position: "bottom-left" })  // error of input field validation & existing email & existing user name 
+            }
 
         }
         catch (error) {
+            //console.log(error)
+            toast.error(error, "Some thing went Wrong", { position: "bottom-left" })
 
+        }
+        finally {
+            dispatch(EndLoading())
         }
 
     }
@@ -157,7 +182,13 @@ const RegisterPage = () => {
                         />
                     </div>
 
-                    <Button type="submit" className="w-full my-4 uppercase"> Sign Up </Button>
+
+                    {
+                        loading ? (<Button type="submit" className="w-full my-4"> Loading... </Button>) :
+                            (<Button type="submit" className="w-full my-4 uppercase"> Sign Up </Button>)
+                    }
+
+
                     <span className='text-sm'>Already have an account? <Link className='text-blue-900' to="/login"> Login </Link></span>
 
 

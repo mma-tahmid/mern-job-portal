@@ -4,7 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup } from '@/components/ui/radio-group';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'sonner';
+import { useDispatch, useSelector } from 'react-redux';
+import { EndLoading, StartLoading } from '@/react-redux/slice/userSlice';
+
 const LoginPage = () => {
 
     const [input, setInput] = useState({
@@ -13,14 +18,47 @@ const LoginPage = () => {
         role: "",
     })
 
+    const navigate = useNavigate();
+
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value })
     }
 
 
+    // Redux
+    const dispatch = useDispatch()
+
+    const { loading } = useSelector((state) => state.userAuth)
+
+
     const submitHandler = async (event) => {
+
         event.preventDefault()
-        console.log(input)
+        // console.log(input)
+
+        try {
+            dispatch(StartLoading())
+
+            const response = await axios.post("/api/v8/user-auth/login", input)
+
+            if (response.data.success) {
+
+                navigate("/")
+                toast.success(response.data.message, { position: "bottom-left" }) // toast use for notifications 
+            }
+            else {
+                toast.error(response.data.message, { position: "bottom-left" })
+            }
+
+        }
+        catch (error) {
+            console.log(error)
+            toast.error("Some thing went Wrong", { position: "bottom-left" })
+            //toast.error(error.message, "Some thing went Wrong", { position: "top-right" })
+        }
+        finally {
+            dispatch(EndLoading())
+        }
 
     }
 
@@ -92,8 +130,13 @@ const LoginPage = () => {
                     </div>
 
 
+                    {
+                        loading ? (<Button type="submit" className="w-full my-4"> Loading... </Button>) :
+                            (<Button type="submit" className="w-full my-4 uppercase"> Login </Button>)
+                    }
 
-                    <Button type="submit" className="w-full my-4 uppercase"> Login </Button>
+
+
                     <span className='text-sm'>Do not have an account? <Link className='text-blue-900' to="/signup"> Sign-up </Link></span>
 
 
