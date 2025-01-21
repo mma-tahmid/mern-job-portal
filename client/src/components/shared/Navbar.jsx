@@ -4,10 +4,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Button } from '../ui/button';
 import { Avatar, AvatarImage } from '../ui/avatar';
 import { LogOut, User2 } from 'lucide-react';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
 
-    const user = false;
+    //const user = true;
+
+    const { currentUser } = useSelector((state) => state.userAuth)
 
     return (
 
@@ -23,13 +26,13 @@ const Navbar = () => {
 
                     <div className='flex items-center gap-12'>
                         <ul className='flex font-medium items-center justify-between gap-5'>
-                            <li> <Link> Home </Link> </li>
-                            <li> <Link> Jobs </Link> </li>
-                            <li> <Link> Browse </Link> </li>
+                            <li> <Link to="/"> Home </Link> </li>
+                            <li> <Link to="/jobs"> Jobs </Link> </li>
+                            <li> <Link to="/browse"> Browse </Link> </li>
                         </ul>
 
                         {
-                            !user ?
+                            !currentUser ?
                                 (
                                     <div className=' flex items-center gap-x-2'>
                                         <Link to='/login'> <Button variant="outline">Log in</Button></Link>
@@ -63,7 +66,7 @@ const Navbar = () => {
                                             <div className='mt-3 flex flex-col  text-gray-500'>
                                                 <div className='flex gap-x-5 items-center'>
                                                     <User2 />
-                                                    <Button className='outline-none border-none ' variant="link"> View Profile</Button>
+                                                    <Button className='outline-none border-none ' variant="link"> <Link to="profile"> View Profile</Link> </Button>
                                                 </div>
 
                                                 <div className='flex gap-x-5 items-center'>

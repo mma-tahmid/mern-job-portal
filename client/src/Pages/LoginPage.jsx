@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
-import { EndLoading, StartLoading } from '@/react-redux/slice/userSlice';
+import { EndLoading, SetAuthUser, StartLoading } from '@/react-redux/slice/userSlice';
 
 const LoginPage = () => {
 
@@ -43,6 +43,7 @@ const LoginPage = () => {
 
             if (response.data.success) {
 
+                dispatch(SetAuthUser(response.data.output))
                 navigate("/")
                 toast.success(response.data.message, { position: "bottom-left" }) // toast use for notifications 
             }
