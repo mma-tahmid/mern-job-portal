@@ -53,9 +53,11 @@ const LoginPage = () => {
 
         }
         catch (error) {
-            console.log(error)
-            toast.error("Some thing went Wrong", { position: "bottom-left" })
-            //toast.error(error.message, "Some thing went Wrong", { position: "top-right" })
+            //console.log(error)
+            // toast.error("Some thing went Wrong", { position: "bottom-left" })
+            //toast.error(error.message, { position: "bottom-left" }) // perfect-this one show server error (Error: Request failed with status code 500 when internet is off )
+            toast.error(error.response.data.message, { position: "bottom-left" }) // show: Error in Login from Backend
+            
         }
         finally {
             dispatch(EndLoading())

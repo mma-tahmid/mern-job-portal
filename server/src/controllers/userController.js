@@ -179,6 +179,11 @@ exports.LogOut = async (req, res) => {
 
     catch (error) {
         console.log(error)
+        res.status(200).send({
+            success: false,
+            message: "Error in LogOut",
+            error
+        })
     }
 
 }

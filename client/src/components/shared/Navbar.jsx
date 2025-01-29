@@ -1,16 +1,43 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Button } from '../ui/button';
 import { Avatar, AvatarImage } from '../ui/avatar';
 import { LogOut, User2 } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { SetAuthUser } from '@/react-redux/slice/userSlice';
+import { toast } from 'sonner';
 
 const Navbar = () => {
 
     //const user = true;
 
     const { currentUser } = useSelector((state) => state.userAuth)
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const logOutHandler = async () => {
+
+        try {
+
+            const response = await axios.get("/api/v8/user-auth/logout")
+
+            if (response.data.success) {
+                dispatch(SetAuthUser(null))
+
+                navigate("/")
+                toast.success(response.data.message, { position: "bottom-left" })
+            }
+
+        }
+
+        catch (error) {
+            console.log(error)
+            toast.error(error.response.data.message, { position: "bottom-left" }) // Show Error in LogOut from Backend
+        }
+    }
+
 
     return (
 
@@ -71,7 +98,7 @@ const Navbar = () => {
 
                                                 <div className='flex gap-x-5 items-center'>
                                                     <LogOut />
-                                                    <Button className='outline-none border-none' variant="link"> Log Out</Button>
+                                                    <Button onClick={logOutHandler} className='outline-none border-none' variant="link"> Log Out</Button>
                                                 </div>
                                             </div>
                                         </PopoverContent>
