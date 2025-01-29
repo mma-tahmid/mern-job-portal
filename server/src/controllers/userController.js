@@ -20,6 +20,11 @@ exports.Registration = async (req, res) => {
         }
 
 
+        const file = req.file;
+        const fileUri = getDataUri(file)
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content)
+
+
         // Check existing users
         const existingUser = await usersModel.findOne({ email })
 
@@ -41,7 +46,10 @@ exports.Registration = async (req, res) => {
             email,
             password: hashed,
             phone,
-            role
+            role,
+            profile: {
+                profilePhoto: cloudResponse.secure_url,
+            }
         }).save()
 
 
