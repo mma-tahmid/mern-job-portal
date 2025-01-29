@@ -6,14 +6,18 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Contact, Mail, Pen } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-const skillss = ["html", "css", "react js", "javascript", "Express js"]
+//const skillss = ["html", "css", "react js", "javascript", "Express js"]
 const isResume = true;
 
 const ProfilePage = () => {
 
+    // modal
     const [open, setOpen] = useState(false);
+
+    const { currentUser } = useSelector((state) => state.userAuth)
 
     return (
 
@@ -33,8 +37,8 @@ const ProfilePage = () => {
                                 </Avatar>
 
                                 <div>
-                                    <h1 className='font-medium text-xl'>Full Name </h1>
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur!</p>
+                                    <h1 className='font-medium text-xl'>{currentUser?.fullName} </h1>
+                                    <p>{currentUser?.profile?.bio}</p>
                                 </div>
                             </div>
 
@@ -45,12 +49,12 @@ const ProfilePage = () => {
 
                             <div className='flex items-center gap-3 my-3'>
                                 <Mail />
-                                <span>tamim@gmail.com</span>
+                                <span>{currentUser?.email}</span>
                             </div>
 
                             <div className='flex items-center gap-3 my-3'>
                                 <Contact />
-                                <span>019892346874</span>
+                                <span>{currentUser?.phone}</span>
                             </div>
                         </div>
 
@@ -58,8 +62,8 @@ const ProfilePage = () => {
                             <h1 className='font-bold'>Skills</h1>
                             <div className='flex items-center gap-3 uppercase mt-4'>
                                 {
-                                    skillss.length !== 0 ? (
-                                        skillss.map((item, i) => (
+                                    currentUser?.profile?.skills.length !== 0 ? (
+                                        currentUser?.profile?.skills.map((item, i) => (
                                             <Badge key={i}> {item} </Badge>
                                         ))
                                     ) :
@@ -75,7 +79,7 @@ const ProfilePage = () => {
                         <div className='grid w-full max-w-sm items-center gap-1.5 mt-6'>
                             <Label className='text-md font-bold'> Resume </Label>
                             {
-                                isResume ? (<a href="https://www.youtube.com/" target='blank' className='text-blue-800 font-semibold w-full cursor-pointer'> Tamim Mern Stack </a>) : (
+                                isResume ? ( <a href={currentUser?.profile?.resume} target='blank' className='text-blue-800 font-semibold w-full cursor-pointer'> {currentUser?.profile?.resumeOriginalName} </a>) : (
                                     <span>N/A</span>
                                 )
                             }
@@ -91,7 +95,7 @@ const ProfilePage = () => {
 
                     </div>
 
-                    <UpdateProfileDialog open={open} setOpen={setOpen} />
+                    <UpdateProfileDialog openModal={open} setOpenModal={setOpen} />
 
                 </div>
 

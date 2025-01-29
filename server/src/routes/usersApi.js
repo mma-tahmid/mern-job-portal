@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post("/registration", SingleUpload, userControllers.Registration);
 router.post("/login", userControllers.Login);
-router.put("/update-profile/:pid", VerifyToken, userControllers.UpdateProfile);
+router.put("/update-profile/:pid", VerifyToken, SingleUpload, userControllers.UpdateProfile);
 router.get("/logout", userControllers.LogOut)
 
 

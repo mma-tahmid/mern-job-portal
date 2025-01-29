@@ -1,6 +1,11 @@
 const usersModel = require("../models/userModel");
 const bcryptss = require('bcrypt');
 var jwt = require('jsonwebtoken');
+const getDataUri = require("../utility/dataUri");
+const { cloudinary_js_config } = require("../utility/cloudinary");
+const cloudinary = require("../utility/cloudinary");
+// const { getDataUri } = require("../utility/dataUri");
+// const { cloudinary } = require("../utility/cloudinary");
 
 
 exports.Registration = async (req, res) => {
@@ -189,28 +194,75 @@ exports.UpdateProfile = async (req, res) => {
 
         const { fullName, email, phone, bio, skills } = req.body
 
-        // input fields validation
-        // if (!fullName || !email || !phone || !bio || !skills) {
-        //     return res.send({ message: "All fields are required" })
-        // }
+        let file = req.file
+
+
+
+        let resumeUrl
+        let resumeName
+
+        if (file) {
+            const fileUri = getDataUri(file);
+            const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+            resumeUrl = cloudResponse.secure_url;
+            //console.log(resumeUrl)
+            resumeName = file.originalname;
+            //console.log(resumeName)
+        }
+
+
+
+
+        //console.log("Uploaded file:", files);
+
+
+        // ** MAIN Part
+        // const fileUri = getDataUri(file); // Convert file buffer to base64
+        //console.log("File URI:", fileUri);
+        //const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        //console.log("Cloudinary Upload Success:", cloudResponse);
+        // **MAIN PART
+
+        //const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
+        //resumeUrl = cloudResponse.secure_url; // Get uploaded file URL
+
 
 
         // In model skill type is String. and its converted to array using split method
-        let skillsArray = skills.split(",")
+        // let skillsArray = skills.split(",")
+        let skillsArray = skills ? skills.split(",") : [];
+
+        // const updateUser = await usersModel.findByIdAndUpdate(req.params.pid, {
+        //     $set: {
+        //         fullName: fullName,
+        //         email: email,
+        //         phone: phone,
+        //         "profile.bio": bio, // Update nested bio
+        //         "profile.skills": skillsArray, // Update nested skills
+        //         "profile.resume": cloudResponse.secure_url, // Add profile image URL
+        //         "profile.resumeOriginalName": file.originalname, // Save original file name
+
+        //     }
+        // }, { new: true })
+
+        const updateData = {
+            fullName,
+            email,
+            phone,
+            "profile.bio": bio,
+            "profile.skills": skillsArray,
+        };
+
+        if (resumeUrl) updateData["profile.resume"] = resumeUrl;
+        if (resumeName) updateData["profile.resumeOriginalName"] = resumeName;
+
+        const updatedUser = await usersModel.findByIdAndUpdate(req.params.pid, { $set: updateData }, { new: true });
 
 
-        const updateUser = await usersModel.findByIdAndUpdate(req.params.pid, {
-            $set: {
-                fullName: fullName,
-                email: email,
-                phone: phone,
-                "profile.bio": bio, // Update nested bio
-                "profile.skills": skillsArray, // Update nested skills
 
-            }
-        }, { new: true })
-
-        const { password, ...rest } = updateUser.toObject();
+        //const { password, ...rest } = updateUser.toObject();
+        const { password, ...rest } = updatedUser.toObject();
 
         res.status(200).send({
             success: true,
@@ -221,7 +273,7 @@ exports.UpdateProfile = async (req, res) => {
     }
 
     catch (error) {
-
+        console.log(error)
         res.status(500).send({
             success: false,
             message: "Error in Update user",
