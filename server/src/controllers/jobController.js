@@ -140,7 +140,6 @@ exports.GetJobById = async (req, res) => {
             success: false,
             error,
             message: "Error in Getting Single Jobs",
-            error: error.message
         })
 
     }

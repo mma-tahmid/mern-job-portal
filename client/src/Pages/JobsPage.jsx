@@ -3,12 +3,15 @@ import JobCard from '@/components/allJobComponents/JobCard';
 
 import Navbar from '@/components/shared/Navbar';
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-const jobsArray = [1, 2, 3, 4, 5, 6, 7, 8]
+//const jobsArray = [1, 2, 3, 4, 5, 6, 7, 8]
 
 
 
 const JobsPage = () => {
+
+    const { allJobs } = useSelector((state) => state.jobslc)
 
     return (
 
@@ -29,15 +32,15 @@ const JobsPage = () => {
                         {/* Job Cards Components */}
                         {
 
-                            jobsArray.length <= 0 ? <span> Job not found </span> :
+                            allJobs.length <= 0 ? <span> Job not found </span> :
                                 (
                                     <div className='flex-1 h-[88vh] overflow-y-auto pb-5'>
 
                                         <div className='grid grid-cols-3 gap-4'>
                                             {
-                                                jobsArray.map((item, i) => (
+                                                allJobs.map((item, i) => (
                                                     <div key={i}>
-                                                        <JobCard />
+                                                        <JobCard jobProps={item} />
                                                     </div>
                                                 ))
                                             }
