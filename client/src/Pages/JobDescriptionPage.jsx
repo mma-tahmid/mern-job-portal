@@ -2,14 +2,12 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SetSingleJob } from '@/react-redux/slice/jobSlice';
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 const JobDescriptionPage = () => {
-
-    const isApplied = false
 
     const params = useParams();
     const jobId = params.id
@@ -17,7 +15,33 @@ const JobDescriptionPage = () => {
     const dispatch = useDispatch();
 
     const { singleJob } = useSelector((state) => state.jobslc)
+
     const { currentUser } = useSelector((state) => state.userAuth)
+
+    const isInitiallyApplied = singleJob?.applications?.some(application => application.applicant === currentUser?._id) || false
+
+    const [isApplied, setIsApplied] = useState(isInitiallyApplied)
+
+    const applyJobHandler = async () => {
+
+        try {
+            const response = await axios.get(`/api/v8/application/apply-job/${jobId}`)
+            if (response.data.success) {
+
+                setIsApplied(true) // update the local state
+                const updatedSingleJob = { ...singleJob, applications: [...singleJob.applications, { applicant: currentUser?._id }] }
+                dispatch(SetSingleJob(updatedSingleJob)) // helps us to real time UI update
+                toast.success(response.data.message)
+            }
+        }
+
+        catch (error) {
+            console.log(error)
+            toast.error(error.response.data.message)
+        }
+
+    }
+
 
     const fetchSingleJob = async () => {
 
@@ -25,6 +49,7 @@ const JobDescriptionPage = () => {
             const response = await axios.get(`/api/v8/job/student-job/${jobId}`)
             if (response.data.success) {
                 dispatch(SetSingleJob(response.data.output))
+                setIsApplied(response.data.output.applications.some(application => application.applicant === currentUser?._id)) // Ensure the state is in sync with fetched data
             }
         }
 
@@ -38,6 +63,7 @@ const JobDescriptionPage = () => {
     useEffect(() => {
         fetchSingleJob()
     }, [jobId, dispatch, currentUser?._id])
+
 
     return (
 
@@ -57,7 +83,9 @@ const JobDescriptionPage = () => {
                             </div>
                         </div>
 
-                        <Button disabled={isApplied} className={`rounded-lg ${isApplied ? 'bg-gray-700 cursor-not-allowed' : 'bg - [#7209b7] hover:bg-[#5f32ad]'}`}>  {isApplied ? 'Already Applied' : 'Apply Now'}</Button>
+                        <Button
+                            onClick={isApplied ? null : applyJobHandler}
+                            disabled={isApplied} className={`rounded-lg ${isApplied ? 'bg-gray-700 cursor-not-allowed' : 'bg - [#7209b7] hover:bg-[#5f32ad]'}`}>  {isApplied ? 'Already Applied' : 'Apply Now'}</Button>
                     </div>
 
                     <h1 className='font-bold text-center text-3xl my-4'> Job Description </h1>

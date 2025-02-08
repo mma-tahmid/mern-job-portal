@@ -8,6 +8,8 @@ import JobsPage from './Pages/JobsPage'
 import BrowsePage from './Pages/BrowsePage'
 import ProfilePage from './Pages/ProfilePage'
 import JobDescriptionPage from './Pages/JobDescriptionPage'
+import CompaniesPage from './Pages/AdminPage/CompaniesPage'
+import CompanyCreatePage from './Pages/AdminPage/CompanyCreatePage'
 
 
 const appRouter = createBrowserRouter([
@@ -44,7 +46,18 @@ const appRouter = createBrowserRouter([
   {
     path: '/profile',
     element: <ProfilePage />
-  }
+  },
+
+  // Admin
+  {
+    path: '/admin/companies',
+    element: <CompaniesPage />
+  },
+
+  {
+    path: '/admin/companies/create',
+    element: <CompanyCreatePage />
+  },
 
 ])
 

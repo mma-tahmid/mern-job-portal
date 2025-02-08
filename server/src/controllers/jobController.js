@@ -117,7 +117,9 @@ exports.GetJobById = async (req, res) => {
 
     try {
 
-        const job = await jobmodel.findById(req.params.pid);
+        const job = await jobmodel.findById(req.params.pid).populate({
+            path: "applications"
+        });
 
         if (!job) {
             return res.status(404).send({
