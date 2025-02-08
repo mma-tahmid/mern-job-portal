@@ -25,8 +25,6 @@ const companySlices = createSlice({
             state.singleCompany = action.payload
         },
 
-       
-
     }
 
 });
