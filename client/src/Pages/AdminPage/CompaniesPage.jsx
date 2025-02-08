@@ -9,6 +9,7 @@ const CompaniesPage = () => {
 
     const navigate = useNavigate()
 
+
     return (
 
         <>
