@@ -3,7 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     //loading: false,
-    singleCompany: null 
+    singleCompany: null,
+    allCompanies: [],
+    searchCompanyByText: ""
 }
 
 const companySlices = createSlice({
@@ -25,9 +27,17 @@ const companySlices = createSlice({
             state.singleCompany = action.payload
         },
 
+        SetAllCompanies: (state, action) => {
+            state.allCompanies = action.payload
+        },
+
+        SetSearchCompanyByText: (state, action) => {
+            state.searchCompanyByText = action.payload
+        }
+
     }
 
 });
 
-export const { SetSingleCompany } = companySlices.actions
+export const { SetSingleCompany, SetAllCompanies, SetSearchCompanyByText } = companySlices.actions
 export default companySlices.reducer 

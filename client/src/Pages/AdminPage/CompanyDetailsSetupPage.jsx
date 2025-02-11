@@ -2,6 +2,7 @@ import Navbar from '@/components/shared/Navbar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import useGetCompanyById from '@/hooks/useGetCompanyById';
 import axios from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
@@ -11,12 +12,15 @@ import { toast } from 'sonner';
 
 const CompanyDetailsSetupPage = () => {
 
-    const [loading, setLoading] = useState(false);
 
     const params = useParams();
     const cId = params.id
+    useGetCompanyById(cId)
 
     const navigate = useNavigate()
+
+    const [loading, setLoading] = useState(false);
+
 
     const [input, setInput] = useState({
         companyName: "",
