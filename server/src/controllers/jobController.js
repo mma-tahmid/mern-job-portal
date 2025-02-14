@@ -156,7 +156,10 @@ exports.getAdminJobs = async (req, res) => {
 
         const adminUserId = req.userInformation.individualUserTokenId;
 
-        const jobs = await jobmodel.find({ createdBy: adminUserId })
+        const jobs = await jobmodel.find({ createdBy: adminUserId }).populate({
+            path: "companys",
+            createdAt: -1
+        })
 
         if (!jobs) {
             return res.status(404).send({

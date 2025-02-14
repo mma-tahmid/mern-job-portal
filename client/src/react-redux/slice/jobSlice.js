@@ -4,7 +4,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     //loading: false,
     allJobs: [],
-    singleJob: null
+    allAdminJobs: [],
+    singleJob: null,
+    searchJobByText: ""
 }
 
 const jobSlices = createSlice({
@@ -30,9 +32,17 @@ const jobSlices = createSlice({
             state.singleJob = action.payload
         },
 
+        SetAllAdminJobs: (state, action) => {
+            state.allAdminJobs = action.payload
+        },
+
+        SetSearchJobByText: (state, action) => {
+            state.searchJobByText = action.payload
+        }
+
     }
 
 });
 
-export const { SetAllJobs, SetSingleJob } = jobSlices.actions
+export const { SetAllJobs, SetSingleJob, SetAllAdminJobs, SetSearchJobByText } = jobSlices.actions
 export default jobSlices.reducer 
