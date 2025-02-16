@@ -30,7 +30,7 @@ const JobCard = ({ jobProps }) => {
                     <Button className="p-6" variant="outline" size="icon">
                         <Avatar>
 
-                            <AvatarImage src="https://png.pngtree.com/png-vector/20220509/ourmid/pngtree-company-logo-design-trademark-design-creative-logo-png-image_4569380.png" />
+                            <AvatarImage src={jobProps?.companys?.logo} />
 
                         </Avatar>
                     </Button>

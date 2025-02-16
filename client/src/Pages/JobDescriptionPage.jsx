@@ -14,6 +14,8 @@ const JobDescriptionPage = () => {
 
     const dispatch = useDispatch();
 
+    const [loading, setLoading] = useState(true); // Added loading state
+
     const { singleJob } = useSelector((state) => state.jobslc)
 
     const { currentUser } = useSelector((state) => state.userAuth)
@@ -25,6 +27,8 @@ const JobDescriptionPage = () => {
     const applyJobHandler = async () => {
 
         try {
+            setLoading(true)
+
             const response = await axios.get(`/api/v8/application/apply-job/${jobId}`)
             if (response.data.success) {
 
@@ -38,6 +42,8 @@ const JobDescriptionPage = () => {
         catch (error) {
             console.log(error)
             toast.error(error.response.data.message)
+        }finally{
+            setLoading(false)
         }
 
     }
@@ -48,8 +54,12 @@ const JobDescriptionPage = () => {
         try {
             const response = await axios.get(`/api/v8/job/student-job/${jobId}`)
             if (response.data.success) {
-                dispatch(SetSingleJob(response.data.output))
-                setIsApplied(response.data.output.applications.some(application => application.applicant === currentUser?._id)) // Ensure the state is in sync with fetched data
+                // dispatch(SetSingleJob(response.data.output))
+                //                 setIsApplied(response.data.output.applications.some(application => application.applicant === currentUser?._id)) // Ensure the state is in sync with fetched data
+                const jobData = response.data.output || {};
+                jobData.applications = jobData.applications || []; // Ensure applications is an array
+                dispatch(SetSingleJob(jobData));
+                setIsApplied(jobData.applications.some(application => application.applicant === currentUser?._id));
             }
         }
 
@@ -64,6 +74,9 @@ const JobDescriptionPage = () => {
         fetchSingleJob()
     }, [jobId, dispatch, currentUser?._id])
 
+    // if (loading) {
+    //     return <p className="text-center text-lg font-semibold">Loading job details...</p>;
+    // }
 
     return (
 
@@ -96,7 +109,7 @@ const JobDescriptionPage = () => {
                         <h1 className='font-bold my-1'>Description: <span className='pl-4 font-normal text-gary-800'>{singleJob?.description}</span></h1>
                         <h1 className='font-bold my-1'>Experience: <span className='pl-4 font-normal text-gary-800'>{singleJob?.experienceLevel} Years</span></h1>
                         <h1 className='font-bold my-1'>Salary: <span className='pl-4 font-normal text-gary-800'>BDT {singleJob?.salary} </span></h1>
-                        <h1 className='font-bold my-1'>Total Applicant: <span className='pl-4 font-normal text-gary-800'> {singleJob?.applications.length}</span></h1>
+                        <h1 className='font-bold my-1'>Total Applicant: <span className='pl-4 font-normal text-gary-800'> {singleJob?.applications.length || 0}</span></h1>
                         <h1 className='font-bold my-1'>Posted Date: <span className='pl-4 font-normal text-gary-800'> {singleJob?.createdAt.split("T")[0]} </span></h1>
                     </div>
 

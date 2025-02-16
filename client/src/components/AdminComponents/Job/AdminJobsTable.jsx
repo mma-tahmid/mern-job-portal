@@ -17,6 +17,7 @@ const AdminJobsTable = () => {
 
     useEffect(() => {
 
+
         if (!Array.isArray(allAdminJobs)) {
             setFilterJobs([]); // Ensure an empty array instead of undefined
             return;
