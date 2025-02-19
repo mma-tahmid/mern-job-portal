@@ -1,6 +1,6 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Edit2, MoreHorizontal } from 'lucide-react';
+import { Edit2, Eye, MoreHorizontal } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -64,10 +64,17 @@ const AdminJobsTable = () => {
                                 <Popover>
                                     <PopoverTrigger> <MoreHorizontal /> </PopoverTrigger>
                                     <PopoverContent className='w-32'>
+                                        {/* need modify this part: Need JobUpdated Api */}
                                         <div onClick={() => navigate(`/admin/companies/${item._id}`)} className='flex items-center gap-2 w-fit cursor-pointer'>
                                             <Edit2 className='w-4 ' />
                                             <span>Edit</span>
                                         </div>
+
+                                        <div onClick={() => navigate(`/admin/jobs/${item._id}/applicants`)} className='flex items-center gap-2 w-fit cursor-pointer'>
+                                            <Eye className='w-4' />
+                                            <span>Applicants</span>
+                                        </div>
+
                                     </PopoverContent>
                                 </Popover>
                             </TableCell>

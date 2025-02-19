@@ -1,8 +1,12 @@
 import React from 'react';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { Badge } from '../ui/badge';
+import { useSelector } from 'react-redux';
+import { split } from 'postcss/lib/list';
 
 const AppliedJobTable = () => {
+
+    const { allAppliedJobs } = useSelector((state) => state.jobslc)
 
     return (
 
@@ -23,13 +27,13 @@ const AppliedJobTable = () => {
                 <TableBody>
 
                     {
-                        [1, 2, 3, 4].map((items, i) => (
+                        allAppliedJobs.length <= 0 ? <span>You have not applied any job yet</span> : allAppliedJobs.map((items, i) => (
                             <TableRow key={i}>
 
-                                <TableCell> 21-01-2025</TableCell>
-                                <TableCell> Frontend Developer</TableCell>
-                                <TableCell> Google</TableCell>
-                                <TableCell><Badge>Selected</Badge></TableCell>
+                                <TableCell> {items?.createdAt.split("T")[0]} </TableCell>
+                                <TableCell> {items?.jobs?.jobTitle} </TableCell>
+                                <TableCell> {items?.jobs?.companys?.companyName}</TableCell>
+                                <TableCell><Badge className={`${items?.status === "Rejected" ? 'bg-red-400' : items.status === 'pending' ? 'bg-gray-400' : 'bg-green-400'}`}>{items?.status.toUpperCase()}</Badge></TableCell>
 
                             </TableRow>
                         ))

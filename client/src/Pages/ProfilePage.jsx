@@ -5,6 +5,7 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import useGetAllAppliedJobs from '@/hooks/useGetAllAppliedJobs';
 import { Contact, Mail, Pen } from 'lucide-react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -13,6 +14,8 @@ import { useSelector } from 'react-redux';
 const isResume = true;
 
 const ProfilePage = () => {
+
+    useGetAllAppliedJobs();
 
     // modal
     const [open, setOpen] = useState(false);
@@ -79,7 +82,7 @@ const ProfilePage = () => {
                         <div className='grid w-full max-w-sm items-center gap-1.5 mt-6'>
                             <Label className='text-md font-bold'> Resume </Label>
                             {
-                                isResume ? ( <a href={currentUser?.profile?.resume} target='blank' className='text-blue-800 font-semibold w-full cursor-pointer'> {currentUser?.profile?.resumeOriginalName} </a>) : (
+                                isResume ? (<a href={currentUser?.profile?.resume} target='blank' className='text-blue-800 font-semibold w-full cursor-pointer'> {currentUser?.profile?.resumeOriginalName} </a>) : (
                                     <span>N/A</span>
                                 )
                             }
