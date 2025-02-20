@@ -3,8 +3,10 @@ const express = require("express")
 //const userControllers = require("../controllers/UserController");
 
 const userControllers = require("../controllers/userController");
-const { VerifyToken } = require("../middlewares/VerifyToken");
+
 const { SingleUpload } = require("../middlewares/multer");
+const { VerifyToken } = require("../middlewares/verifyToken");
+
 
 const router = express.Router();
 
