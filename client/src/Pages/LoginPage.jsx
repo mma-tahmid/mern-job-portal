@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/shared/Navbar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,7 +28,7 @@ const LoginPage = () => {
     // Redux
     const dispatch = useDispatch()
 
-    const { loading } = useSelector((state) => state.userAuth)
+    const { loading, currentUser } = useSelector((state) => state.userAuth)
 
 
     const submitHandler = async (event) => {
@@ -64,6 +64,13 @@ const LoginPage = () => {
         }
 
     }
+
+    //browser a login route set korle logged in user ar khetre home page a nia jbe
+    useEffect(() => {
+        if (currentUser) {
+            navigate("/")
+        }
+    }, [])
 
     return (
 

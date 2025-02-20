@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup } from '@/components/ui/radio-group';
 import { EndLoading, StartLoading } from '@/react-redux/slice/userSlice';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -36,7 +36,7 @@ const RegisterPage = () => {
     // Redux
     const dispatch = useDispatch()
 
-    const { loading } = useSelector((state) => state.userAuth)
+    const { loading, currentUser } = useSelector((state) => state.userAuth)
 
     const submitHandler = async (event) => {
         event.preventDefault()
@@ -82,6 +82,13 @@ const RegisterPage = () => {
         }
 
     }
+
+    //browser a register route set korle logged in user ar khetre home page a nia jbe (signUp page show korbe na)
+    useEffect(() => {
+        if (currentUser) {
+            navigate("/")
+        }
+    }, [])
 
     return (
 

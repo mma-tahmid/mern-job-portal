@@ -14,6 +14,7 @@ import CompanyDetailsSetupPage from './Pages/AdminPage/CompanyDetailsSetupPage'
 import AdminJobPage from './Pages/AdminPage/AdminJobPage'
 import AdminCreateJobPage from './Pages/AdminPage/AdminCreateJobPage'
 import AdminApplicantPage from './Pages/AdminPage/AdminApplicantPage'
+import ProtectedRoutes from './Pages/AdminPage/ProtectedRoutes'
 
 
 const appRouter = createBrowserRouter([
@@ -53,34 +54,35 @@ const appRouter = createBrowserRouter([
   },
 
   // Admin
+
   {
     path: '/admin/companies',
-    element: <CompaniesPage />
+    element: <ProtectedRoutes> <CompaniesPage /> </ProtectedRoutes>
   },
 
   {
     path: '/admin/companies/create',
-    element: <CompanyCreatePage />
+    element: <ProtectedRoutes> <CompanyCreatePage /> </ProtectedRoutes>
   },
 
   {
     path: '/admin/companies/:id',
-    element: <CompanyDetailsSetupPage />
+    element: <ProtectedRoutes> <CompanyDetailsSetupPage /> </ProtectedRoutes>
   },
 
   {
     path: '/admin/jobs',
-    element: <AdminJobPage />
+    element: <ProtectedRoutes> <AdminJobPage /> </ProtectedRoutes>
   },
 
   {
     path: '/admin/jobs/create',
-    element: <AdminCreateJobPage />
+    element: <ProtectedRoutes> <AdminCreateJobPage /> </ProtectedRoutes>
   },
 
   {
     path: '/admin/jobs/:id/applicants',
-    element: <AdminApplicantPage />
+    element: <ProtectedRoutes> <AdminApplicantPage /> </ProtectedRoutes>
   }
 
 ])
