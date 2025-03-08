@@ -16,7 +16,7 @@ const useGetAllJobs = () => {
     const fetchAllJobs = async () => {
 
         try {
-            const response = await axios.get(`/api/v8/job/all-jobs?keyword=${searchedQuery}`)
+            const response = await axios.get(`/api/v8/job/all-jobs?keyword=${searchedQuery}`, {withCredentials:true})
             if (response.data.success) {
                 dispatch(SetAllJobs(response.data.output))
             }

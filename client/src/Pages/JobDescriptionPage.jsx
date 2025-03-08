@@ -29,7 +29,8 @@ const JobDescriptionPage = () => {
         try {
             setLoading(true)
 
-            const response = await axios.get(`/api/v8/application/apply-job/${jobId}`)
+            const response = await axios.get(`/api/v8/application/apply-job/${jobId}`, {withCredentials:true})
+
             if (response.data.success) {
 
                 setIsApplied(true) // update the local state
@@ -52,7 +53,7 @@ const JobDescriptionPage = () => {
     const fetchSingleJob = async () => {
 
         try {
-            const response = await axios.get(`/api/v8/job/student-job/${jobId}`)
+            const response = await axios.get(`/api/v8/job/student-job/${jobId}`, {withCredentials:true})
             if (response.data.success) {
                 // dispatch(SetSingleJob(response.data.output))
                 //                 setIsApplied(response.data.output.applications.some(application => application.applicant === currentUser?._id)) // Ensure the state is in sync with fetched data
